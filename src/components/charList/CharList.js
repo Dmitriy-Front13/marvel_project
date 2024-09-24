@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 
-import useMarvelService from '../../services/MarvelService';
+import { useGetAllCharactersQuery } from '../../redux/apiSlice';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
@@ -11,32 +11,24 @@ import './charList.scss';
 const CharList = (props) => {
 
     const [charList, setCharList] = useState([]);
-    const [newItemLoading, setnewItemLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charEnded, setCharEnded] = useState(false);
-    
-    const {loading, error, getAllCharacters} = useMarvelService();
+
+    const {data, isFetching, isError} = useGetAllCharactersQuery(offset);
 
     useEffect(() => {
-        onRequest(offset, true);
-    }, [])
-
-    const onRequest = (offset, initial) => {
-        initial ? setnewItemLoading(false) : setnewItemLoading(true);
-        getAllCharacters(offset)
-            .then(onCharListLoaded)
-    }
-
-    const onCharListLoaded = async(newCharList) => {
-        let ended = false;
-        if (newCharList.length < 9) {
-            ended = true;
+        if (data) {
+            setCharList((prevCharList) => [...prevCharList, ...data]);
+            if (data.length < 9) {
+                setCharEnded(true);
+            }
         }
-        setCharList([...charList, ...newCharList]);
-        setnewItemLoading(false);
-        setOffset(offset + 9);
-        setCharEnded(ended);
+    }, [data])
+
+    const loadMore = () => {
+        setOffset((prevOffset)=> prevOffset + 9)
     }
+
 
     const itemRefs = useRef([]);
 
@@ -87,8 +79,8 @@ const CharList = (props) => {
     
     const items = renderItems(charList);
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading && !newItemLoading ? <Spinner/> : null;
+    const errorMessage = isError ? <ErrorMessage/> : null;
+    const spinner = isFetching ? <Spinner/> : null;
 
     return (
         <div className="char__list">
@@ -96,10 +88,10 @@ const CharList = (props) => {
             {spinner}
             {items}
             <button 
-                disabled={newItemLoading} 
+                disabled={isFetching} 
                 style={{'display' : charEnded ? 'none' : 'block'}}
                 className="button button__main button__long"
-                onClick={() => onRequest(offset)}>
+                onClick={loadMore}>
                 <div className="inner">load more</div>
             </button>
         </div>
