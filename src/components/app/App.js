@@ -30,10 +30,10 @@ const App = () => {
                                     <ComicsPage />
                                 </Route>
                                 <Route exact path="/comics/:id">
-                                    <SinglePage Component={SingleComicLayout} dataType='comic' />
+                                    <SinglePage Component={SingleComicLayout} dataType='comics' />
                                 </Route>
                                 <Route exact path="/characters/:id">
-                                    <SinglePage Component={SingleCharacterLayout} dataType='character' />
+                                    <SinglePage Component={SingleCharacterLayout} dataType='characters' />
                                 </Route>
                                 <Route path="*">
                                     <Page404 />

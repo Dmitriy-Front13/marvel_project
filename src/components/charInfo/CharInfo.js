@@ -1,42 +1,22 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
 import './charInfo.scss';
+import { useGetCharacterQuery } from '../../redux/apiSlice';
 
-const CharInfo = (props) => {
+const CharInfo = ({id}) => {
+   
+        const {data, isFetching, isError} = useGetCharacterQuery(id, {
+            skip: !id, 
+        });
 
-    const [char, setChar] = useState(null);
-
-    const {loading, error, getCharacter, clearError} = useMarvelService();
-
-    useEffect(() => {
-        updateChar()
-    }, [props.charId])
-
-    const updateChar = () => {
-        const {charId} = props;
-        if (!charId) {
-            return;
-        }
-
-        clearError();
-        getCharacter(charId)
-            .then(onCharLoaded)
-    }
-
-    const onCharLoaded = (char) => {
-        setChar(char);
-    }
-
-    const skeleton = char || loading || error ? null : <Skeleton/>;
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !char) ? <View char={char}/> : null;
+    const skeleton = data || isFetching || isError ? null : <Skeleton/>;
+    const errorMessage = isError ? <ErrorMessage/> : null;
+    const spinner = isFetching ? <Spinner/> : null;
+    const content = !(isFetching || isError || !data) ? <View char={data}/> : null;
 
     return (
         <div className="char__info">

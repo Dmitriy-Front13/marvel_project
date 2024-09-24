@@ -9,8 +9,9 @@ import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
     const [charId] = useState(Math.floor(Math.random() * (1011400 - 1011000)) + 1011000);
-
+    
     const { data, isFetching, isError, refetch, isSuccess } = useGetCharacterQuery(charId);
+    
 
     const errorMessage = isError ? <ErrorMessage /> : null;
     const spinner = isFetching ? <Spinner /> : null;

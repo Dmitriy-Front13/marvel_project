@@ -36,9 +36,19 @@ export const marvelApi = createApi({
       transformResponse: (response) => {
         return transformComics(response.data.results[0])
       }
-    })
+    }),
+    getInfo: builder.query({
+      query: ({ id, dataType }) => `${dataType}/${id}?${_apiKey}`,
+      transformResponse: (response, meta, arg) => {
+        if (arg.dataType === 'comics') {
+          return transformComics(response.data.results[0]);
+        } else if (arg.dataType === 'characters') {
+          return transformCharacter(response.data.results[0]);
+        }
+      }
+    })    
   })
 })
 
 
-export const { useGetAllCharactersQuery, useGetAllComicsQuery, useGetCharacterByNameQuery, useGetCharacterQuery, useGetComicQuery } = marvelApi;
+export const { useGetAllCharactersQuery, useGetAllComicsQuery, useGetCharacterByNameQuery, useGetCharacterQuery, useGetComicQuery, useGetInfoQuery } = marvelApi;
