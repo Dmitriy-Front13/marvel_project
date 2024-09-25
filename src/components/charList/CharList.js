@@ -8,7 +8,7 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './charList.scss';
 
-const CharList = (props) => {
+const CharList = ({onCharSelected}) => {
 
     const [charList, setCharList] = useState([]);
     const [offset, setOffset] = useState(210);
@@ -52,12 +52,12 @@ const CharList = (props) => {
                         tabIndex={0}
                         ref={el => itemRefs.current[i] = el}
                         onClick={() => {
-                            props.onCharSelected(item.id);
+                            onCharSelected(item.id);
                             focusOnItem(i);
                         }}
                         onKeyPress={(e) => {
                             if (e.key === ' ' || e.key === "Enter") {
-                                props.onCharSelected(item.id);
+                                onCharSelected(item.id);
                                 focusOnItem(i);
                             }
                         }}>

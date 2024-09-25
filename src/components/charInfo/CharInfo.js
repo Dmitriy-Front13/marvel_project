@@ -7,16 +7,15 @@ import Skeleton from '../skeleton/Skeleton';
 import './charInfo.scss';
 import { useGetCharacterQuery } from '../../redux/apiSlice';
 
-const CharInfo = ({id}) => {
-   
-        const {data, isFetching, isError} = useGetCharacterQuery(id, {
-            skip: !id, 
-        });
+const CharInfo = ({ charId }) => {
+    const { data, isFetching, isError } = useGetCharacterQuery(charId, {
+        skip: !charId,
+    });
 
-    const skeleton = data || isFetching || isError ? null : <Skeleton/>;
-    const errorMessage = isError ? <ErrorMessage/> : null;
-    const spinner = isFetching ? <Spinner/> : null;
-    const content = !(isFetching || isError || !data) ? <View char={data}/> : null;
+    const skeleton = data || isFetching || isError ? null : <Skeleton />;
+    const errorMessage = isError ? <ErrorMessage /> : null;
+    const spinner = isFetching ? <Spinner /> : null;
+    const content = !(isFetching || isError || !data) ? <View char={data} /> : null;
 
     return (
         <div className="char__info">
@@ -28,18 +27,18 @@ const CharInfo = ({id}) => {
     )
 }
 
-const View = ({char}) => {
-    const {name, description, thumbnail, homepage, wiki, comics} = char;
+const View = ({ char }) => {
+    const { name, description, thumbnail, homepage, wiki, comics } = char;
 
-    let imgStyle = {'objectFit' : 'cover'};
+    let imgStyle = { 'objectFit': 'cover' };
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-        imgStyle = {'objectFit' : 'contain'};
+        imgStyle = { 'objectFit': 'fill' };
     }
 
     return (
         <>
             <div className="char__basics">
-                <img src={thumbnail} alt={name} style={imgStyle}/>
+                <img src={thumbnail} alt={name} style={imgStyle} />
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
@@ -68,7 +67,7 @@ const View = ({char}) => {
                             </li>
                         )
                     })
-                }                
+                }
             </ul>
         </>
     )
