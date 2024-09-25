@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import { useGetCharacterQuery } from '../../redux/apiSlice';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
 import './charInfo.scss';
-import { useGetCharacterQuery } from '../../redux/apiSlice';
 
 const CharInfo = ({ charId }) => {
     const { data, isFetching, isError } = useGetCharacterQuery(charId, {
@@ -61,9 +63,12 @@ const View = ({ char }) => {
                     comics.map((item, i) => {
                         // eslint-disable-next-line
                         if (i > 9) return;
+                        const comicId = item.resourceURI.split('/').pop();
                         return (
                             <li key={i} className="char__comics-item">
+                                <Link to={`/comics/${comicId}`}>
                                 {item.name}
+                                </Link>
                             </li>
                         )
                     })
