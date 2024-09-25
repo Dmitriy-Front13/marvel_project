@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6", // Целевая версия JavaScript
+    "module": "commonjs", // Система модулей
+    "jsx": "react-jsx", // Поддержка JSX для React
+    "strict": true, // Включает строгую типизацию
+    "esModuleInterop": true, // Поддержка импорта модулей ES6
+    "moduleResolution": "node", // Резолвинг модулей как в Node.js
+    "allowSyntheticDefaultImports": true // Позволяет импортировать по умолчанию из модулей без экспортов по умолчанию
+  },
+  "include": ["src/**/*"], // Какие файлы включать
+  "exclude": ["node_modules", "**/*.test.ts"] // Какие файлы исключать
+}
